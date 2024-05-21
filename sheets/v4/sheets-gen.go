@@ -11035,8 +11035,8 @@ type SpreadsheetsValuesGetCall struct {
 	ifNoneMatch_  string
 	ctx_          context.Context
 	header_       http.Header
-	columns		  int
-	rows		  int
+	Columns		  int
+	Rows		  int
 }
 
 // Get: Returns a range of values from a spreadsheet. The caller must specify
@@ -11203,9 +11203,9 @@ func (c *SpreadsheetsValuesGetCall) Do(opts ...googleapi.CallOption) (*ValueRang
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, gensupport.WrapError(err)
 	}
-	x := make([][]interface{}, c.rows, c.rows)
-	for i :=0; i < c.rows; i++ {
-		x[i] = make([]interface{}, 0, c.columns)
+	x := make([][]interface{}, c.Rows, c.Rows)
+	for i :=0; i < c.Rows; i++ {
+		x[i] = make([]interface{}, 0, c.Columns)
 	}
 	ret := &ValueRange{
 		Values: x,
