@@ -9008,7 +9008,7 @@ type ValueRange struct {
 	// supported value types are: bool, string, and double. Null values will be
 	// skipped. To set a cell to an empty value, set the string value to an empty
 	// string.
-	Values PreallocatedSlice `json:"values,omitempty"`
+	Values [][]interface{} `json:"values,omitempty"`
 
 	// ServerResponse contains the HTTP response code and headers from the server.
 	googleapi.ServerResponse `json:"-"`
@@ -9023,21 +9023,6 @@ type ValueRange struct {
 	// are omitted from API requests. See
 	// https://pkg.go.dev/google.golang.org/api#hdr-NullFields for more details.
 	NullFields []string `json:"-"`
-}
-
-type PreallocatedSlice [][]interface{}
-
-func (ps *PreallocatedSlice) UnmarshalJSON(data []byte) error {
-	const estimatedSize = 1000
-	*ps = make([][]interface{}, 1000, estimatedSize)
-	x := ([][]interface{})(*ps)
-	for i :=0; i < estimatedSize; i++ {
-		x[i] = make([]interface{}, 0, 50)
-	}
-
-	// Use an alias to avoid infinite recursion in UnmarshalJSON.
-	type noMethod PreallocatedSlice
-	return json.Unmarshal(data, (*noMethod)(ps))
 }
 
 func (s *ValueRange) MarshalJSON() ([]byte, error) {
@@ -11050,6 +11035,8 @@ type SpreadsheetsValuesGetCall struct {
 	ifNoneMatch_  string
 	ctx_          context.Context
 	header_       http.Header
+	columns		  int
+	rows		  int
 }
 
 // Get: Returns a range of values from a spreadsheet. The caller must specify
@@ -11216,7 +11203,12 @@ func (c *SpreadsheetsValuesGetCall) Do(opts ...googleapi.CallOption) (*ValueRang
 	if err := googleapi.CheckResponse(res); err != nil {
 		return nil, gensupport.WrapError(err)
 	}
+	x := make([][]interface{}, c.rows, c.rows)
+	for i :=0; i < c.rows; i++ {
+		x[i] = make([]interface{}, 0, c.columns)
+	}
 	ret := &ValueRange{
+		Values: x,
 		ServerResponse: googleapi.ServerResponse{
 			Header:         res.Header,
 			HTTPStatusCode: res.StatusCode,
