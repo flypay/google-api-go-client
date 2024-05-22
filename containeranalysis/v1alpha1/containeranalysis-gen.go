@@ -1215,6 +1215,8 @@ type ComplianceOccurrence struct {
 	NonComplianceReason string `json:"nonComplianceReason,omitempty"`
 	// NonCompliantFiles: A list of files which are violating compliance checks.
 	NonCompliantFiles []*NonCompliantFile `json:"nonCompliantFiles,omitempty"`
+	// Version: The OS and config version the benchmark was run on.
+	Version *ComplianceVersion `json:"version,omitempty"`
 	// ForceSendFields is a list of field names (e.g. "NonComplianceReason") to
 	// unconditionally include in API requests. By default, fields with empty or
 	// default values are omitted from API requests. See
@@ -1593,7 +1595,7 @@ type ContaineranalysisGoogleDevtoolsCloudbuildV1Build struct {
 	// `projects/{PROJECT_ID}/serviceAccounts/{ACCOUNT}`. ACCOUNT can be email
 	// address or uniqueId of the service account.
 	ServiceAccount string `json:"serviceAccount,omitempty"`
-	// Source: The location of the source files to build.
+	// Source: Optional. The location of the source files to build.
 	Source *ContaineranalysisGoogleDevtoolsCloudbuildV1Source `json:"source,omitempty"`
 	// SourceProvenance: Output only. A permanent fixed identifier for source.
 	SourceProvenance *ContaineranalysisGoogleDevtoolsCloudbuildV1SourceProvenance `json:"sourceProvenance,omitempty"`
@@ -2063,13 +2065,14 @@ func (s *ContaineranalysisGoogleDevtoolsCloudbuildV1BuiltImage) MarshalJSON() ([
 // ContaineranalysisGoogleDevtoolsCloudbuildV1ConnectedRepository: Location of
 // the source in a 2nd-gen Google Cloud Build repository resource.
 type ContaineranalysisGoogleDevtoolsCloudbuildV1ConnectedRepository struct {
-	// Dir: Directory, relative to the source root, in which to run the build.
+	// Dir: Optional. Directory, relative to the source root, in which to run the
+	// build.
 	Dir string `json:"dir,omitempty"`
 	// Repository: Required. Name of the Google Cloud Build repository, formatted
 	// as `projects/*/locations/*/connections/*/repositories/*`.
 	Repository string `json:"repository,omitempty"`
-	// Revision: The revision to fetch from the Git repository such as a branch, a
-	// tag, a commit SHA, or any Git ref.
+	// Revision: Required. The revision to fetch from the Git repository such as a
+	// branch, a tag, a commit SHA, or any Git ref.
 	Revision string `json:"revision,omitempty"`
 	// ForceSendFields is a list of field names (e.g. "Dir") to unconditionally
 	// include in API requests. By default, fields with empty or default values are
@@ -2143,6 +2146,36 @@ func (s *ContaineranalysisGoogleDevtoolsCloudbuildV1FileHashes) MarshalJSON() ([
 	return gensupport.MarshalJSON(NoMethod(*s), s.ForceSendFields, s.NullFields)
 }
 
+// ContaineranalysisGoogleDevtoolsCloudbuildV1GCSLocation: Represents a storage
+// location in Cloud Storage
+type ContaineranalysisGoogleDevtoolsCloudbuildV1GCSLocation struct {
+	// Bucket: Cloud Storage bucket. See
+	// https://cloud.google.com/storage/docs/naming#requirements
+	Bucket string `json:"bucket,omitempty"`
+	// Generation: Cloud Storage generation for the object. If the generation is
+	// omitted, the latest generation will be used.
+	Generation int64 `json:"generation,omitempty,string"`
+	// Object: Cloud Storage object. See
+	// https://cloud.google.com/storage/docs/naming#objectnames
+	Object string `json:"object,omitempty"`
+	// ForceSendFields is a list of field names (e.g. "Bucket") to unconditionally
+	// include in API requests. By default, fields with empty or default values are
+	// omitted from API requests. See
+	// https://pkg.go.dev/google.golang.org/api#hdr-ForceSendFields for more
+	// details.
+	ForceSendFields []string `json:"-"`
+	// NullFields is a list of field names (e.g. "Bucket") to include in API
+	// requests with the JSON null value. By default, fields with empty values are
+	// omitted from API requests. See
+	// https://pkg.go.dev/google.golang.org/api#hdr-NullFields for more details.
+	NullFields []string `json:"-"`
+}
+
+func (s *ContaineranalysisGoogleDevtoolsCloudbuildV1GCSLocation) MarshalJSON() ([]byte, error) {
+	type NoMethod ContaineranalysisGoogleDevtoolsCloudbuildV1GCSLocation
+	return gensupport.MarshalJSON(NoMethod(*s), s.ForceSendFields, s.NullFields)
+}
+
 // ContaineranalysisGoogleDevtoolsCloudbuildV1GitConfig: GitConfig is a
 // configuration for git operations.
 type ContaineranalysisGoogleDevtoolsCloudbuildV1GitConfig struct {
@@ -2172,6 +2205,9 @@ type ContaineranalysisGoogleDevtoolsCloudbuildV1GitConfigHttpConfig struct {
 	// ProxySecretVersionName: SecretVersion resource of the HTTP proxy URL. The
 	// proxy URL should be in format protocol://@]proxyhost[:port].
 	ProxySecretVersionName string `json:"proxySecretVersionName,omitempty"`
+	// ProxySslCaInfo: Optional. Cloud Storage object storing the certificate to
+	// use with the HTTP proxy.
+	ProxySslCaInfo *ContaineranalysisGoogleDevtoolsCloudbuildV1GCSLocation `json:"proxySslCaInfo,omitempty"`
 	// ForceSendFields is a list of field names (e.g. "ProxySecretVersionName") to
 	// unconditionally include in API requests. By default, fields with empty or
 	// default values are omitted from API requests. See
@@ -2193,20 +2229,20 @@ func (s *ContaineranalysisGoogleDevtoolsCloudbuildV1GitConfigHttpConfig) Marshal
 // ContaineranalysisGoogleDevtoolsCloudbuildV1GitSource: Location of the source
 // in any accessible Git repository.
 type ContaineranalysisGoogleDevtoolsCloudbuildV1GitSource struct {
-	// Dir: Directory, relative to the source root, in which to run the build. This
-	// must be a relative path. If a step's `dir` is specified and is an absolute
-	// path, this value is ignored for that step's execution.
+	// Dir: Optional. Directory, relative to the source root, in which to run the
+	// build. This must be a relative path. If a step's `dir` is specified and is
+	// an absolute path, this value is ignored for that step's execution.
 	Dir string `json:"dir,omitempty"`
-	// Revision: The revision to fetch from the Git repository such as a branch, a
-	// tag, a commit SHA, or any Git ref. Cloud Build uses `git fetch` to fetch the
-	// revision from the Git repository; therefore make sure that the string you
-	// provide for `revision` is parsable by the command. For information on string
-	// values accepted by `git fetch`, see
+	// Revision: Optional. The revision to fetch from the Git repository such as a
+	// branch, a tag, a commit SHA, or any Git ref. Cloud Build uses `git fetch` to
+	// fetch the revision from the Git repository; therefore make sure that the
+	// string you provide for `revision` is parsable by the command. For
+	// information on string values accepted by `git fetch`, see
 	// https://git-scm.com/docs/gitrevisions#_specifying_revisions. For information
 	// on `git fetch`, see https://git-scm.com/docs/git-fetch.
 	Revision string `json:"revision,omitempty"`
-	// Url: Location of the Git repo to build. This will be used as a `git remote`,
-	// see https://git-scm.com/docs/git-remote.
+	// Url: Required. Location of the Git repo to build. This will be used as a
+	// `git remote`, see https://git-scm.com/docs/git-remote.
 	Url string `json:"url,omitempty"`
 	// ForceSendFields is a list of field names (e.g. "Dir") to unconditionally
 	// include in API requests. By default, fields with empty or default values are
@@ -2297,20 +2333,20 @@ type ContaineranalysisGoogleDevtoolsCloudbuildV1RepoSource struct {
 	BranchName string `json:"branchName,omitempty"`
 	// CommitSha: Explicit commit SHA to build.
 	CommitSha string `json:"commitSha,omitempty"`
-	// Dir: Directory, relative to the source root, in which to run the build. This
-	// must be a relative path. If a step's `dir` is specified and is an absolute
-	// path, this value is ignored for that step's execution.
+	// Dir: Optional. Directory, relative to the source root, in which to run the
+	// build. This must be a relative path. If a step's `dir` is specified and is
+	// an absolute path, this value is ignored for that step's execution.
 	Dir string `json:"dir,omitempty"`
-	// InvertRegex: Only trigger a build if the revision regex does NOT match the
-	// revision regex.
+	// InvertRegex: Optional. Only trigger a build if the revision regex does NOT
+	// match the revision regex.
 	InvertRegex bool `json:"invertRegex,omitempty"`
-	// ProjectId: ID of the project that owns the Cloud Source Repository. If
-	// omitted, the project ID requesting the build is assumed.
+	// ProjectId: Optional. ID of the project that owns the Cloud Source
+	// Repository. If omitted, the project ID requesting the build is assumed.
 	ProjectId string `json:"projectId,omitempty"`
-	// RepoName: Name of the Cloud Source Repository.
+	// RepoName: Required. Name of the Cloud Source Repository.
 	RepoName string `json:"repoName,omitempty"`
-	// Substitutions: Substitutions to use in a triggered build. Should only be
-	// used with RunBuildTrigger
+	// Substitutions: Optional. Substitutions to use in a triggered build. Should
+	// only be used with RunBuildTrigger
 	Substitutions map[string]string `json:"substitutions,omitempty"`
 	// TagName: Regex matching tags to build. The syntax of the regular expressions
 	// accepted is the syntax accepted by RE2 and described at
@@ -2564,12 +2600,12 @@ type ContaineranalysisGoogleDevtoolsCloudbuildV1StorageSource struct {
 	// Requirements
 	// (https://cloud.google.com/storage/docs/bucket-naming#requirements)).
 	Bucket string `json:"bucket,omitempty"`
-	// Generation: Cloud Storage generation for the object. If the generation is
-	// omitted, the latest generation will be used.
+	// Generation: Optional. Cloud Storage generation for the object. If the
+	// generation is omitted, the latest generation will be used.
 	Generation int64 `json:"generation,omitempty,string"`
-	// Object: Cloud Storage object containing the source. This object must be a
-	// zipped (`.zip`) or gzipped archive file (`.tar.gz`) containing source to
-	// build.
+	// Object: Required. Cloud Storage object containing the source. This object
+	// must be a zipped (`.zip`) or gzipped archive file (`.tar.gz`) containing
+	// source to build.
 	Object string `json:"object,omitempty"`
 	// SourceFetcher: Optional. Option to specify the tool to fetch the source file
 	// for the build.
@@ -2603,15 +2639,15 @@ func (s *ContaineranalysisGoogleDevtoolsCloudbuildV1StorageSource) MarshalJSON()
 // description here
 // (https://github.com/GoogleCloudPlatform/cloud-builders/tree/master/gcs-fetcher).
 type ContaineranalysisGoogleDevtoolsCloudbuildV1StorageSourceManifest struct {
-	// Bucket: Cloud Storage bucket containing the source manifest (see Bucket Name
-	// Requirements
+	// Bucket: Required. Cloud Storage bucket containing the source manifest (see
+	// Bucket Name Requirements
 	// (https://cloud.google.com/storage/docs/bucket-naming#requirements)).
 	Bucket string `json:"bucket,omitempty"`
 	// Generation: Cloud Storage generation for the object. If the generation is
 	// omitted, the latest generation will be used.
 	Generation int64 `json:"generation,omitempty,string"`
-	// Object: Cloud Storage object containing the source manifest. This object
-	// must be a JSON file.
+	// Object: Required. Cloud Storage object containing the source manifest. This
+	// object must be a JSON file.
 	Object string `json:"object,omitempty"`
 	// ForceSendFields is a list of field names (e.g. "Bucket") to unconditionally
 	// include in API requests. By default, fields with empty or default values are

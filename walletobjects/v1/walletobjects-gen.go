@@ -495,15 +495,11 @@ func (s *AirportInfo) MarshalJSON() ([]byte, error) {
 }
 
 type AppLinkData struct {
-	// AndroidAppLinkInfo: Optional information about the partner app link. If
-	// included, the app link link module will be rendered on the valuable details
-	// on the android client.
+	// AndroidAppLinkInfo: Optional information about the partner app link.
 	AndroidAppLinkInfo *AppLinkDataAppLinkInfo `json:"androidAppLinkInfo,omitempty"`
 	// IosAppLinkInfo: Deprecated. Links to open iOS apps are not supported.
 	IosAppLinkInfo *AppLinkDataAppLinkInfo `json:"iosAppLinkInfo,omitempty"`
-	// WebAppLinkInfo: Optional information about the partner app link. If
-	// included, the app link link module will be rendered on the valuable details
-	// on the web client.
+	// WebAppLinkInfo: Optional information about the partner web link.
 	WebAppLinkInfo *AppLinkDataAppLinkInfo `json:"webAppLinkInfo,omitempty"`
 	// ForceSendFields is a list of field names (e.g. "AndroidAppLinkInfo") to
 	// unconditionally include in API requests. By default, fields with empty or
@@ -524,15 +520,14 @@ func (s *AppLinkData) MarshalJSON() ([]byte, error) {
 }
 
 type AppLinkDataAppLinkInfo struct {
-	// AppLogoImage: Optional image to be displayed in the App Link Module
+	// AppLogoImage: Deprecated. Image isn't supported in the app link module.
 	AppLogoImage *Image `json:"appLogoImage,omitempty"`
-	// AppTarget: Url to follow when opening the App Link Module on clients. It
-	// will be used by partners to open their webpage or deeplink into their app.
+	// AppTarget: Target to follow when opening the app link on clients. It will be
+	// used by partners to open their app or webpage.
 	AppTarget *AppLinkDataAppLinkInfoAppTarget `json:"appTarget,omitempty"`
-	// Description: String to be displayed in the description of the App Link
-	// Module Required
+	// Description: Deprecated. Description isn't supported in the app link module.
 	Description *LocalizedString `json:"description,omitempty"`
-	// Title: String to be displayed in the title of the App Link Module Required
+	// Title: Deprecated. Title isn't supported in the app link module.
 	Title *LocalizedString `json:"title,omitempty"`
 	// ForceSendFields is a list of field names (e.g. "AppLogoImage") to
 	// unconditionally include in API requests. By default, fields with empty or
@@ -1740,6 +1735,10 @@ type EventTicketClass struct {
 	// AllowMultipleUsersPerObject: Deprecated. Use
 	// `multipleDevicesAndHoldersAllowedStatus` instead.
 	AllowMultipleUsersPerObject bool `json:"allowMultipleUsersPerObject,omitempty"`
+	// AppLinkData: Optional app or website link that will be displayed as a button
+	// on the front of the pass. If AppLinkData is provided for the corresponding
+	// object that will be used instead.
+	AppLinkData *AppLinkData `json:"appLinkData,omitempty"`
 	// CallbackOptions: Callback options to be used to call the issuer back for
 	// every save/delete of an object for this class by the end-user. All objects
 	// of this class are eligible for the callback.
@@ -2082,7 +2081,9 @@ func (s *EventTicketClassListResponse) MarshalJSON() ([]byte, error) {
 }
 
 type EventTicketObject struct {
-	// AppLinkData: Optional information about the partner app link.
+	// AppLinkData: Optional app or website link that will be displayed as a button
+	// on the front of the pass. If AppLinkData is provided for the corresponding
+	// class only object AppLinkData will be displayed.
 	AppLinkData *AppLinkData `json:"appLinkData,omitempty"`
 	// Barcode: The barcode type and value.
 	Barcode *Barcode `json:"barcode,omitempty"`
@@ -2475,6 +2476,10 @@ type FlightClass struct {
 	// AllowMultipleUsersPerObject: Deprecated. Use
 	// `multipleDevicesAndHoldersAllowedStatus` instead.
 	AllowMultipleUsersPerObject bool `json:"allowMultipleUsersPerObject,omitempty"`
+	// AppLinkData: Optional app or website link that will be displayed as a button
+	// on the front of the pass. If AppLinkData is provided for the corresponding
+	// object that will be used instead.
+	AppLinkData *AppLinkData `json:"appLinkData,omitempty"`
 	// BoardingAndSeatingPolicy: Policies for boarding and seating. These will
 	// inform which labels will be shown to users.
 	BoardingAndSeatingPolicy *BoardingAndSeatingPolicy `json:"boardingAndSeatingPolicy,omitempty"`
@@ -2821,7 +2826,9 @@ func (s *FlightHeader) MarshalJSON() ([]byte, error) {
 }
 
 type FlightObject struct {
-	// AppLinkData: Optional information about the partner app link.
+	// AppLinkData: Optional app or website link that will be displayed as a button
+	// on the front of the pass. If AppLinkData is provided for the corresponding
+	// class only object AppLinkData will be displayed.
 	AppLinkData *AppLinkData `json:"appLinkData,omitempty"`
 	// Barcode: The barcode type and value.
 	Barcode *Barcode `json:"barcode,omitempty"`
@@ -3030,6 +3037,10 @@ func (s *FrequentFlyerInfo) MarshalJSON() ([]byte, error) {
 
 // GenericClass: Generic Class
 type GenericClass struct {
+	// AppLinkData: Optional app or website link that will be displayed as a button
+	// on the front of the pass. If AppLinkData is provided for the corresponding
+	// object that will be used instead.
+	AppLinkData *AppLinkData `json:"appLinkData,omitempty"`
 	// CallbackOptions: Callback options to be used to call the issuer back for
 	// every save/delete of an object for this class by the end-user. All objects
 	// of this class are eligible for the callback.
@@ -3108,15 +3119,15 @@ type GenericClass struct {
 
 	// ServerResponse contains the HTTP response code and headers from the server.
 	googleapi.ServerResponse `json:"-"`
-	// ForceSendFields is a list of field names (e.g. "CallbackOptions") to
+	// ForceSendFields is a list of field names (e.g. "AppLinkData") to
 	// unconditionally include in API requests. By default, fields with empty or
 	// default values are omitted from API requests. See
 	// https://pkg.go.dev/google.golang.org/api#hdr-ForceSendFields for more
 	// details.
 	ForceSendFields []string `json:"-"`
-	// NullFields is a list of field names (e.g. "CallbackOptions") to include in
-	// API requests with the JSON null value. By default, fields with empty values
-	// are omitted from API requests. See
+	// NullFields is a list of field names (e.g. "AppLinkData") to include in API
+	// requests with the JSON null value. By default, fields with empty values are
+	// omitted from API requests. See
 	// https://pkg.go.dev/google.golang.org/api#hdr-NullFields for more details.
 	NullFields []string `json:"-"`
 }
@@ -3182,8 +3193,9 @@ func (s *GenericClassListResponse) MarshalJSON() ([]byte, error) {
 
 // GenericObject: Generic Object
 type GenericObject struct {
-	// AppLinkData: Information about the partner app link. The maximum number of
-	// these fields displayed is 10.
+	// AppLinkData: Optional app or website link that will be displayed as a button
+	// on the front of the pass. If AppLinkData is provided for the corresponding
+	// class only object AppLinkData will be displayed.
 	AppLinkData *AppLinkData `json:"appLinkData,omitempty"`
 	// Barcode: The barcode type and value. If pass does not have a barcode, we can
 	// allow the issuer to set Barcode.alternate_text and display just that.
@@ -3375,6 +3387,10 @@ type GiftCardClass struct {
 	// AllowMultipleUsersPerObject: Deprecated. Use
 	// `multipleDevicesAndHoldersAllowedStatus` instead.
 	AllowMultipleUsersPerObject bool `json:"allowMultipleUsersPerObject,omitempty"`
+	// AppLinkData: Optional app or website link that will be displayed as a button
+	// on the front of the pass. If AppLinkData is provided for the corresponding
+	// object that will be used instead.
+	AppLinkData *AppLinkData `json:"appLinkData,omitempty"`
 	// CallbackOptions: Callback options to be used to call the issuer back for
 	// every save/delete of an object for this class by the end-user. All objects
 	// of this class are eligible for the callback.
@@ -3612,7 +3628,9 @@ func (s *GiftCardClassListResponse) MarshalJSON() ([]byte, error) {
 }
 
 type GiftCardObject struct {
-	// AppLinkData: Optional information about the partner app link.
+	// AppLinkData: Optional app or website link that will be displayed as a button
+	// on the front of the pass. If AppLinkData is provided for the corresponding
+	// class only object AppLinkData will be displayed.
 	AppLinkData *AppLinkData `json:"appLinkData,omitempty"`
 	// Balance: The card's monetary balance.
 	Balance *Money `json:"balance,omitempty"`
@@ -4283,6 +4301,10 @@ type LoyaltyClass struct {
 	// AllowMultipleUsersPerObject: Deprecated. Use
 	// `multipleDevicesAndHoldersAllowedStatus` instead.
 	AllowMultipleUsersPerObject bool `json:"allowMultipleUsersPerObject,omitempty"`
+	// AppLinkData: Optional app or website link that will be displayed as a button
+	// on the front of the pass. If AppLinkData is provided for the corresponding
+	// object that will be used instead.
+	AppLinkData *AppLinkData `json:"appLinkData,omitempty"`
 	// CallbackOptions: Callback options to be used to call the issuer back for
 	// every save/delete of an object for this class by the end-user. All objects
 	// of this class are eligible for the callback.
@@ -4554,7 +4576,9 @@ type LoyaltyObject struct {
 	// Recommended maximum length is 20 characters to ensure full string is
 	// displayed on smaller screens.
 	AccountName string `json:"accountName,omitempty"`
-	// AppLinkData: Optional information about the partner app link.
+	// AppLinkData: Optional app or website link that will be displayed as a button
+	// on the front of the pass. If AppLinkData is provided for the corresponding
+	// class only object AppLinkData will be displayed.
 	AppLinkData *AppLinkData `json:"appLinkData,omitempty"`
 	// Barcode: The barcode type and value.
 	Barcode *Barcode `json:"barcode,omitempty"`
@@ -5218,6 +5242,10 @@ type OfferClass struct {
 	// AllowMultipleUsersPerObject: Deprecated. Use
 	// `multipleDevicesAndHoldersAllowedStatus` instead.
 	AllowMultipleUsersPerObject bool `json:"allowMultipleUsersPerObject,omitempty"`
+	// AppLinkData: Optional app or website link that will be displayed as a button
+	// on the front of the pass. If AppLinkData is provided for the corresponding
+	// object that will be used instead.
+	AppLinkData *AppLinkData `json:"appLinkData,omitempty"`
 	// CallbackOptions: Callback options to be used to call the issuer back for
 	// every save/delete of an object for this class by the end-user. All objects
 	// of this class are eligible for the callback.
@@ -5482,7 +5510,9 @@ func (s *OfferClassListResponse) MarshalJSON() ([]byte, error) {
 }
 
 type OfferObject struct {
-	// AppLinkData: Optional information about the partner app link.
+	// AppLinkData: Optional app or website link that will be displayed as a button
+	// on the front of the pass. If AppLinkData is provided for the corresponding
+	// class only object AppLinkData will be displayed.
 	AppLinkData *AppLinkData `json:"appLinkData,omitempty"`
 	// Barcode: The barcode type and value.
 	Barcode *Barcode `json:"barcode,omitempty"`
@@ -6500,6 +6530,10 @@ type TransitClass struct {
 	// AllowMultipleUsersPerObject: Deprecated. Use
 	// `multipleDevicesAndHoldersAllowedStatus` instead.
 	AllowMultipleUsersPerObject bool `json:"allowMultipleUsersPerObject,omitempty"`
+	// AppLinkData: Optional app or website link that will be displayed as a button
+	// on the front of the pass. If AppLinkData is provided for the corresponding
+	// object that will be used instead.
+	AppLinkData *AppLinkData `json:"appLinkData,omitempty"`
 	// CallbackOptions: Callback options to be used to call the issuer back for
 	// every save/delete of an object for this class by the end-user. All objects
 	// of this class are eligible for the callback.
@@ -6802,7 +6836,9 @@ type TransitObject struct {
 	// ActivationStatus: The activation status for the object. Required if the
 	// class has `activationOptions` set.
 	ActivationStatus *ActivationStatus `json:"activationStatus,omitempty"`
-	// AppLinkData: Optional information about the partner app link.
+	// AppLinkData: Optional app or website link that will be displayed as a button
+	// on the front of the pass. If AppLinkData is provided for the corresponding
+	// class only object AppLinkData will be displayed.
 	AppLinkData *AppLinkData `json:"appLinkData,omitempty"`
 	// Barcode: The barcode type and value.
 	Barcode *Barcode `json:"barcode,omitempty"`
